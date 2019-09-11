@@ -46,9 +46,10 @@ export function gitHubJobsURL(keyWord, location) {
 
 export function gitHubJobsResultPrint(jobObject, i) {
   let title = "<h2 class=title>" + jobObject.title + " - " + jobObject.type + "</h2>";
+  let date = "<p>" + jobObject.created_at + "</p>";
   let company = "<p class=company><a href=" + jobObject.company_url + ">" + jobObject.company + "</a></p>";
   let location = "<p class=location>" + jobObject.location + "</p>";
   let description = "<div class=description>" + jobObject.description +"</div>";
-  let output = "<div class=job" + i + ">" + title + company + location + description + "</div>";
+  let output = "<div class=job" + i + ">" + title + date + company + location + description + "</div>";
   return output;
 }
