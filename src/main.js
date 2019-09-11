@@ -4,6 +4,7 @@ import {
 } from './scripts';
 import 'bootstrap';
 import $ from 'jquery';
+import './styles.css';
 
 
 $(document).ready(function(event) {
@@ -79,14 +80,14 @@ $(document).ready(function(event) {
       body.forEach(function(job, i) {
         output += gitHubJobsResultPrint(job, i);
       });
-      $('.results').append(output);
+      $('#jobs').html(output);
     }, function(error) {
       $('.error').append(`There was an error processing your request: ${error.message}`);
     });
 
     promise2.then(function(response) {
       let body = JSON.parse(response);
-      $('.results').append(`<img src='${body.data[(Math.floor(Math.random()*body.data.length))].images.downsized.url}'>`);
+      $('#gif').html(`<img src='${body.data[(Math.floor(Math.random()*body.data.length))].images.downsized.url}'>`);
     }, function(error) {
       $('.error').append(`There was an error processing your request: ${error.message}`);
     });
@@ -98,17 +99,20 @@ $(document).ready(function(event) {
         let number = i + 1;
         newsStory(ids[i]).then(function(response) {
           let story = JSON.parse(response);
-          console.log(`<p>` + number + `. <a href='${story.url}'>${story.title}</a></p>`);
           htmlArray.push(`<p>` + number + `. <a href='${story.url}'>${story.title}</a></p>`);
         });
       }
       setTimeout(function() {
-        let sortedHtml = htmlArray.sort(function(a,b) {return parseInt(String(a.charAt(3)+a.charAt(4)))-parseInt(String(b.charAt(3)+b.charAt(4)))});
-        sortedHtml.forEach(function(story) {
-          $('.news').append(story);
+        let sortedHtml = htmlArray.sort(function(a, b) {
+          return parseInt(String(a.charAt(3) + a.charAt(4))) - parseInt(String(b.charAt(3) + b.charAt(4)))
         });
-        console.log(sortedHtml);
-      }, 3000);
+        let output = '';
+        sortedHtml.forEach(function(story) {
+          output+=story;
+        });
+        $('.news').html(output);
+        $('div').show();
+      }, 500);
     });
   });
 });
