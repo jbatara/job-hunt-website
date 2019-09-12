@@ -49,7 +49,73 @@ export function gitHubJobsResultPrint(jobObject, i) {
   let date = "<p>" + jobObject.created_at + "</p>";
   let company = "<p class=company><a href=" + jobObject.company_url + ">" + jobObject.company + "</a></p>";
   let location = "<p class=location>" + jobObject.location + "</p>";
-  let description = "<div class=description>" + jobObject.description +"</div>";
+  let description = "<div class=description>" + jobObject.description + "</div>";
   let output = "<div class=job" + i + ">" + title + date + company + location + description + "</div>";
   return output;
 }
+
+export function makeGiphyRequest() {
+  return new Promise(function(resolve, reject) {
+      let request = new XMLHttpRequest();
+      let urlGiphy = `https://api.giphy.com/v1/gifs/search?q=motivational&api_key=${process.env.API_KEY}`;
+      request.onload = function() {
+        if (this.status === 200) {
+          resolve(request.response);
+        } else {
+          reject(Error(request.statusText));
+        }
+      }
+      request.open("GET", urlGiphy, true);
+      request.send();
+    });
+  }
+
+  export function makeGithubJobsRequest (keyword, location){
+    return new Promise(function(resolve, reject) {
+      let request = new XMLHttpRequest();
+      let url = gitHubJobsURL(keyword, location);
+      request.onload = function() {
+        if (this.status === 200) {
+          resolve(request.response);
+        } else {
+          reject(Error(request.statusText));
+        }
+      }
+      request.open("GET", url, true);
+      request.send();
+    });
+  }
+
+
+  export function hackerNewsBestIDRequest() {
+    return new Promise(function(resolve, reject) {
+      let request = new XMLHttpRequest();
+      let urlNews = `https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty`;
+      request.onload = function() {
+        if (this.status === 200) {
+          resolve(request.response);
+        } else {
+          reject(Error(request.statusText));
+        }
+      }
+      request.open("GET", urlNews, true);
+      request.send();
+    });
+  }
+
+  export function hackerNewsStoryRequest(id) {
+      return new Promise(function(resolve, reject) {
+        let request = new XMLHttpRequest();
+        let urlNewStory = `https://hacker-news.firebaseio.com/v0/item/` + id + `.json?print=pretty`;
+
+        request.onload = function() {
+          if (this.status === 200) {
+            resolve(request.response);
+          } else {
+            reject(Error(request.statusText));
+          }
+        }
+        request.open("GET", urlNewStory, true);
+        request.send();
+      });
+  }
